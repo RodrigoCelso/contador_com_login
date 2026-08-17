@@ -17,6 +17,7 @@ class MyRegisterPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     label: Text('Digite o E-mail'),
                     border: OutlineInputBorder()
@@ -24,6 +25,7 @@ class MyRegisterPage extends StatelessWidget {
                 ),
                 SizedBox( height: 10 ),
                 TextFormField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     label: Text('Digite a Senha'),
                     border: OutlineInputBorder()
@@ -31,6 +33,7 @@ class MyRegisterPage extends StatelessWidget {
                 ),
                 SizedBox( height: 10 ),
                 TextFormField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     label: Text('Repita a senha'),
                     border: OutlineInputBorder()
