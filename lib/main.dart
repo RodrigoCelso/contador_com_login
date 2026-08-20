@@ -1,8 +1,8 @@
-import 'package:contador_com_login/auth_layout.dart';
-import 'package:contador_com_login/home_page.dart';
-import 'package:contador_com_login/loading_page.dart';
-import 'package:contador_com_login/login_page.dart';
-import 'package:contador_com_login/register_page.dart';
+import 'package:contador_com_login/components/auth_layout.dart';
+import 'package:contador_com_login/pages/home_page.dart';
+import 'package:contador_com_login/pages/loading_page.dart';
+import 'package:contador_com_login/pages/login_page.dart';
+import 'package:contador_com_login/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';

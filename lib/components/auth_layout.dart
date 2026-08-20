@@ -1,6 +1,6 @@
-import 'package:contador_com_login/home_page.dart';
-import 'package:contador_com_login/loading_page.dart';
-import 'package:contador_com_login/login_page.dart';
+import 'package:contador_com_login/pages/home_page.dart';
+import 'package:contador_com_login/pages/loading_page.dart';
+import 'package:contador_com_login/pages/login_page.dart';
 import 'package:contador_com_login/services/auth_service.dart';
 import 'package:flutter/material.dart';
 

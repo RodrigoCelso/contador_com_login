@@ -1,4 +1,4 @@
-import 'package:contador_com_login/app_bar.dart';
+import 'package:contador_com_login/components/app_bar.dart';
 import 'package:contador_com_login/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
