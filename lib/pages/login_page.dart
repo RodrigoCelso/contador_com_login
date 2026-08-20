@@ -2,8 +2,10 @@ import 'package:contador_com_login/components/app_bar.dart';
 import 'package:contador_com_login/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get_rx/get_rx.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -17,17 +19,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
 
-  void entrar() async {
-    try {
-      await authService.value.signIn(
-        email: _emailController.text,
-        password: _senhaController.text,
-      );
+  final RxString _mensagemDeErro = ''.obs;
 
-      Get.offAllNamed('/');
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-    }
+  Future<void> entrar() async {
+    await authService.value.signIn(
+      email: _emailController.text,
+      password: _senhaController.text,
+    );
   }
 
   @override
@@ -79,9 +77,23 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_loginKey.currentState!.validate()) {
-                            entrar();
+                            try {
+                              await entrar();
+                              if (!context.mounted) return;
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Logado com sucesso!"),
+                                ),
+                              );
+
+                              Get.offAllNamed('/');
+                            } on FirebaseAuthException catch (_) {
+                              _mensagemDeErro.value =
+                                  'Erro ao autenticar com o Firebase';
+                            }
                           }
                         },
                         child: Text('Entrar'),
@@ -95,6 +107,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         child: Text('Registrar'),
                       ),
                     ],
+                  ),
+                  SizedBox(width: 10),
+                  Obx(
+                    () => Text(
+                      _mensagemDeErro.value,
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
                   ),
                 ],
               ),

@@ -19,17 +19,11 @@ class _MyRegisterPage extends State<MyRegisterPage> {
 
   String _mensagemDeErro = '';
 
-  void registrar() async {
-    try {
-      await authService.value.createAccount(
-        email: _emailController.text,
-        password: _senhaController.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _mensagemDeErro = e.message ?? 'Erro ao autenticar com o Firebase';
-      });
-    }
+  Future<void> registrar() async {
+    await authService.value.createAccount(
+      email: _emailController.text,
+      password: _senhaController.text,
+    );
   }
 
   @override
@@ -100,18 +94,24 @@ class _MyRegisterPage extends State<MyRegisterPage> {
                 ),
                 SizedBox(height: 15),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_registerKey.currentState!.validate()) {
-                      registrar();
+                      try {
+                        await registrar();
+                        if (!context.mounted) return;
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Registrado com sucesso!"),
-                        ),
-                      );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Registrado com sucesso!"),
+                          ),
+                        );
 
-                      // Navigator.of(context).pop(true);
-                      Get.back();
+                        Get.back();
+                      } on FirebaseAuthException catch (_) {
+                        setState(() {
+                          _mensagemDeErro = 'Erro ao autenticar com o Firebase';
+                        });
+                      }
                     }
                   },
                   child: Text('Registrar'),
