@@ -1,5 +1,9 @@
 import 'package:contador_com_login/app_bar.dart';
+import 'package:contador_com_login/services/auth_service.dart';
+import 'package:contador_com_login/services/counter_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -9,16 +13,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  
+  void deslogar() async {
+    try {
+      await authService.value.signOut();
+      Get.offAllNamed('/');
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(title: 'Home'),
+      appBar: MyAppBar(
+        title: 'Home',
+        actions: [
+          TextButton(
+            onPressed: () {
+              deslogar();
+            },
+            child: Icon(Icons.door_back_door_outlined),
+          ),
+        ],
+      ),
       body: Center(
-        child: Text(
-          'You have pushed the button this many times: $_counter',
-        ),
+        child: Obx(() {
+          return Text('Contador: ${CounterService.instance.getCounter()}');
+        }),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -26,36 +47,25 @@ class _MyHomePageState extends State<MyHomePage> {
           FloatingActionButton(
             heroTag: 'resetar',
             onPressed: () {
-              setState(() {
-                _counter = 0;
-              });
+              CounterService.instance.reset();
             },
             tooltip: 'Resetar',
             child: const Icon(Icons.restart_alt),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
           FloatingActionButton(
             heroTag: 'decrementar',
             onPressed: () {
-              setState(() {
-                _counter--;
-                if (_counter < 0) _counter = 0;
-              });
+              CounterService.instance.decrement();
             },
             tooltip: 'Decrementar',
             child: const Icon(Icons.remove),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
           FloatingActionButton(
             heroTag: 'incrementar',
             onPressed: () {
-              setState(() {
-                _counter++;
-              });
+              CounterService.instance.increment();
             },
             tooltip: 'Incrementar',
             child: const Icon(Icons.add),

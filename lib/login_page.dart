@@ -1,8 +1,34 @@
 import 'package:contador_com_login/app_bar.dart';
+import 'package:contador_com_login/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
-class MyLoginPage extends StatelessWidget {
+class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
+
+  @override
+  State<MyLoginPage> createState() => _MyLoginPageState();
+}
+
+class _MyLoginPageState extends State<MyLoginPage> {
+  final _loginKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _senhaController = TextEditingController();
+
+  void entrar() async {
+    try {
+      await authService.value.signIn(
+        email: _emailController.text,
+        password: _senhaController.text,
+      );
+
+      Get.offAllNamed('/');
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,46 +41,61 @@ class MyLoginPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Form(
+              key: _loginKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
+                    controller: _emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Campo obrigatório";
+                      }
+                      return null;
+                    },
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'E-mail',
-                      border: OutlineInputBorder()
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox( height: 10 ),
+                  SizedBox(height: 10),
                   TextFormField(
+                    controller: _senhaController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Campo obrigatório";
+                      }
+                      return null;
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Senha',
-                      border: OutlineInputBorder()
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox( height: 15 ),
+                  SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pushReplacementNamed('/home');
+                          if (_loginKey.currentState!.validate()) {
+                            entrar();
+                          }
                         },
                         child: Text('Entrar'),
                       ),
-                      SizedBox( width: 10 ),
+                      SizedBox(width: 10),
                       ElevatedButton(
-                        onPressed: () async {
-                          final res = await Navigator.of(context).pushNamed('/register');
-                          if(res == true){
-                            print('Registrado com sucesso!');
-                          }
+                        onPressed: () {
+                          // Navigator.of(context).pushNamed('/register');
+                          Get.toNamed('/register');
                         },
-                        child: Text('Registrar')
+                        child: Text('Registrar'),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -62,5 +103,12 @@ class MyLoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _senhaController.dispose();
+    super.dispose();
   }
 }
