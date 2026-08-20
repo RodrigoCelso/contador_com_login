@@ -11,6 +11,8 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+firebase-installer.sh
+firebase.json
 
 # IntelliJ related
 *.iml

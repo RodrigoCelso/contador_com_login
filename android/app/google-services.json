@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776206258018",
+    "project_id": "contador-com-login-78743",
+    "storage_bucket": "contador-com-login-78743.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776206258018:android:c4123a51549cabfad8663b",
+        "android_client_info": {
+          "package_name": "com.example.contador_com_login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk-w5Bk7ouIQah1APxAbhBK8Z_Y3RmrOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
